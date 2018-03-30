@@ -199,7 +199,7 @@ public class BusquedaNoInformada_CostoUniforme {
 
             }
             if (flag) {
-                if (maze[hojas.get(0).getCur_pos_x()][hojas.get(0).getCur_pos_y()] == 3) {
+                if (maze[hojas.get(0).getCur_pos_x()][hojas.get(0).getCur_pos_y()] == 3 && hojas.get(0).getEstado() != 1) {
                     hojas.get(0).setEstado(1);
                     matica = true;
                 }
