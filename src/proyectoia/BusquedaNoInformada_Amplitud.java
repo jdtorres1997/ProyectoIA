@@ -7,7 +7,6 @@ package proyectoia;
 
 import java.util.*;
 
-
 /**
  *
  * @author juan
@@ -20,15 +19,15 @@ public class BusquedaNoInformada_Amplitud {
     int init_pos_y;
     static int maze[][];
     static private ArrayList<String> solucion;
-    
+
     private static int nodosE = 0;
     private static int profundidad = 0;
-    
+
     BusquedaNoInformada_Amplitud(int[][] mapa) {
         maze = mapa;
         solucion = new ArrayList<>();
     }
-    
+
     void find_cur_pos(int maze[][]) {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
@@ -100,16 +99,20 @@ public class BusquedaNoInformada_Amplitud {
         System.out.print(route);
 
     }
-    
+
     ArrayList<String> getSolucion() {
         return solucion;
     }
-    
+
     public int getProfundidad() {
         return profundidad;
     }
 
-    public int getNodosE(){
+    public static void setProfundidad(int profundidad) {
+        BusquedaNoInformada_Amplitud.profundidad = profundidad;
+    }
+
+    public int getNodosE() {
         return nodosE;
     }
 
@@ -147,6 +150,10 @@ public class BusquedaNoInformada_Amplitud {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("up");
+                    new_son.setProfundidad(hojas.get(0).getProfundidad() + 1);
+                    if (new_son.getProfundidad() > aux.getProfundidad()) {
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
                     hojas.add(new_son);
                 }
                 if (moves.contains("6") && hojas.get(0).getMov() != "left") {
@@ -155,6 +162,10 @@ public class BusquedaNoInformada_Amplitud {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
                     new_son.setMov("rigth");
+                    new_son.setProfundidad(hojas.get(0).getProfundidad() + 1);
+                    if (new_son.getProfundidad() > aux.getProfundidad()) {
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
                     hojas.add(new_son);
                 }
                 if (moves.contains("2") && hojas.get(0).getMov() != "up") {
@@ -163,6 +174,11 @@ public class BusquedaNoInformada_Amplitud {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("down");
+                    new_son.setProfundidad(hojas.get(0).getProfundidad() + 1);
+                    if (new_son.getProfundidad() > aux.getProfundidad()) {
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
+                    hojas.add(new_son);
                     hojas.add(new_son);
                 }
                 if (moves.contains("4") && hojas.get(0).getMov() != "rigth") {
@@ -171,6 +187,10 @@ public class BusquedaNoInformada_Amplitud {
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
                     new_son.setMov("left");
+                    new_son.setProfundidad(hojas.get(0).getProfundidad() + 1);
+                    if (new_son.getProfundidad() > aux.getProfundidad()) {
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
                     hojas.add(new_son);
 
                 }

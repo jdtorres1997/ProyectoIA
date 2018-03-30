@@ -108,6 +108,11 @@ public class BusquedaInformada_Heuristica {
         return profundidad;
     }
 
+    public static void setProfundidad(int profundidad) {
+        BusquedaInformada_Heuristica.profundidad = profundidad;
+    }
+    
+
     public int getNodosE(){
         return nodosE;
     }
@@ -183,7 +188,11 @@ public class BusquedaInformada_Heuristica {
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("up");
                     new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()));
-                    hijos.add(new_son);
+                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
+                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
+                    hojas.add(new_son);
                 }
                 if (moves.contains("6") && hojas.get(0).getMov() != "left") {
                     id++;
@@ -192,7 +201,11 @@ public class BusquedaInformada_Heuristica {
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
                     new_son.setMov("rigth");
                     new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()));
-                    hijos.add(new_son);
+                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
+                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
+                    hojas.add(new_son);
                 }
                 if (moves.contains("2") && hojas.get(0).getMov() != "up") {
                     id++;
@@ -201,7 +214,11 @@ public class BusquedaInformada_Heuristica {
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("down");
                     new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()));
-                    hijos.add(new_son);
+                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
+                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
+                    hojas.add(new_son);
                 }
                 if (moves.contains("4") && hojas.get(0).getMov() != "rigth") {
                     id++;
@@ -210,7 +227,11 @@ public class BusquedaInformada_Heuristica {
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
                     new_son.setMov("left");
                     new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()));
-                    hijos.add(new_son);
+                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
+                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
+                    hojas.add(new_son);
                 }
 
                 arbol.add(hojas.get(0));

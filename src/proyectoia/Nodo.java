@@ -19,11 +19,20 @@ public class Nodo {
     private int productividad = 0;
     private int coste = 0;
     private int estado = 0;
+    private int profundidad = 0;
 
     public Nodo(int id, int parent_id) {
         this.id = id;
         this.parent_id = parent_id;
 
+    }
+
+    public int getProfundidad() {
+        return profundidad;
+    }
+
+    public void setProfundidad(int profundidad) {
+        this.profundidad = profundidad;
     }
 
     public int getEstado() {

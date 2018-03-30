@@ -109,6 +109,10 @@ public class BusquedaInformada_AEstrella {
         return profundidad;
     }
 
+    public static void setProfundidad(int profundidad) {
+        BusquedaInformada_AEstrella.profundidad = profundidad;
+    }
+
     public int getNodosE(){
         return nodosE;
     }
@@ -207,7 +211,11 @@ public class BusquedaInformada_AEstrella {
                     new_son.setEstado(hojas.get(0).getEstado());
                     new_son.setCoste(aux.cost(arbol, new_son, maze));
                     new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()) + new_son.getCoste());
-                    hijos.add(new_son);
+                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
+                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
+                    hojas.add(new_son);
                 }
                 if (moves.contains("6") && (hojas.get(0).getMov() != "left" || matica)) {
                     id++;
@@ -218,7 +226,11 @@ public class BusquedaInformada_AEstrella {
                     new_son.setEstado(hojas.get(0).getEstado());
                     new_son.setCoste(aux.cost(arbol, new_son, maze));
                     new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()) + new_son.getCoste());
-                    hijos.add(new_son);
+                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
+                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
+                    hojas.add(new_son);
                 }
                 if (moves.contains("2") && (hojas.get(0).getMov() != "up" || matica)) {
                     id++;
@@ -229,7 +241,11 @@ public class BusquedaInformada_AEstrella {
                     new_son.setEstado(hojas.get(0).getEstado());
                     new_son.setCoste(aux.cost(arbol, new_son, maze));
                     new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()) + new_son.getCoste());
-                    hijos.add(new_son);
+                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
+                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
+                    hojas.add(new_son);
                 }
                 if (moves.contains("4") && (hojas.get(0).getMov() != "rigth" || matica)) {
                     id++;
@@ -240,7 +256,11 @@ public class BusquedaInformada_AEstrella {
                     new_son.setEstado(hojas.get(0).getEstado());
                     new_son.setCoste(aux.cost(arbol, new_son, maze));
                     new_son.setProductividad(aux.manhatan_Distance(new_son.getCur_pos_x(), new_son.getCur_pos_y()) + new_son.getCoste());
-                    hijos.add(new_son);
+                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
+                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                        aux.setProfundidad(new_son.getProfundidad());
+                    }
+                    hojas.add(new_son);
                 }
 
                 arbol.add(hojas.get(0));
