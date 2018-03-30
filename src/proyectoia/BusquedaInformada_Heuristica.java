@@ -19,7 +19,14 @@ public class BusquedaInformada_Heuristica {
     int target_pos_y;
     int init_pos_x;
     int init_pos_y;
+    static int maze[][];
+    static private ArrayList<String> solucion;
 
+    BusquedaInformada_Heuristica(int[][] mapa) {
+        maze = mapa;
+        solucion = new ArrayList<>();
+    }
+    
     void find_cur_pos(int maze[][]) {
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
@@ -77,15 +84,22 @@ public class BusquedaInformada_Heuristica {
         int size = camino.size();
         int id = camino.get(size - 1).getId();
         String route = "";
+        ArrayList<String> temp = new ArrayList<>();
         for (int i = size - 1; i >= 0; i--) {
             if (camino.get(i).getId() == id && camino.get(i).getId() != 0) {
                 id = camino.get(i).getParent_id();
                 route = camino.get(i).getMov() + "\n" + route;
-
+                temp.add(camino.get(i).getMov());
             }
+        }
+        for (int i = (temp.size() - 1); i >= 0; i--) {
+            solucion.add(temp.get(i));
         }
         System.out.print(route);
 
+    }
+    ArrayList<String> getSolucion() {
+        return solucion;
     }
 
     int manhatan_Distance(int pos_x, int pos_y) {
@@ -125,27 +139,15 @@ public class BusquedaInformada_Heuristica {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void init() {
         System.err.println("busqueda informada por heuristica");
-        BusquedaInformada_Heuristica aux = new BusquedaInformada_Heuristica();
+        BusquedaInformada_Heuristica aux = new BusquedaInformada_Heuristica(maze);
         int id = 0;
         Nodo nod = new Nodo(id, id);
         Vector<Nodo> arbol = new Vector();
         Vector<Nodo> hojas = new Vector();
         Vector<Nodo> hijos = new Vector();
         hojas.add(nod);
-        int maze[][] = {
-            {0, 3, 0, 0, 0, 0, 1, 1, 0, 1},
-            {4, 1, 1, 1, 1, 0, 1, 0, 0, 0},
-            {4, 0, 0, 1, 0, 0, 1, 0, 1, 0},
-            {0, 1, 0, 1, 0, 0, 4, 0, 1, 0},
-            {4, 4, 4, 3, 0, 1, 1, 0, 0, 5},
-            {2, 1, 0, 0, 1, 1, 1, 4, 1, 0},
-            {0, 1, 1, 0, 0, 0, 1, 4, 1, 0},
-            {0, 0, 1, 1, 1, 0, 4, 4, 1, 0},
-            {1, 0, 0, 0, 1, 0, 1, 4, 0, 0},
-            {1, 1, 1, 0, 0, 0, 1, 0, 1, 1}
-        };
         aux.find_cur_pos(maze);
         aux.find_target_pos(maze);
         maze[aux.init_pos_x][aux.init_pos_y] = 0;

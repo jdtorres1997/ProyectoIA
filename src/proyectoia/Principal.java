@@ -11,7 +11,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -34,11 +36,15 @@ public class Principal implements ActionListener {
             AlgAvara, AlgA;
     JButton btEjecutar, btSimular;
     JLabel lbSolucion;
-    public static Mapa mp;
+    private static Mapa mp;
     public static HashMap<Point, JLabel> Labels;
     public static Point Agente;
     public static Point Meta;
     public static String Message;
+    ArrayList<String> solucion = new ArrayList<>(); //ojo con esto
+    int init_pos_x;
+    int init_pos_y;
+    File fichero;
 
     final public ImageIcon MARIO_IMG = scalar_imagen("/Imagenes/Mario.png");
     final public ImageIcon LADRILLO_IMG = scalar_imagen("/Imagenes/Ladrillo.png");
@@ -103,7 +109,7 @@ public class Principal implements ActionListener {
         pMapa.setPreferredSize(new Dimension(600, 600));
         pMapa.setBorder(BorderFactory.createTitledBorder("Mapa"));
         pGlobal.add(pMapa, "growx, growy");
-        
+
         //Panel solucion
         pSolucion = new JPanel(new MigLayout());
         pSolucion.setVisible(true);
@@ -115,7 +121,7 @@ public class Principal implements ActionListener {
         pSolucion.add(lbSolucion, "span 4,wrap");
         pSolucion.setBorder(BorderFactory.createTitledBorder("Solución"));
         pGlobal.add(pSolucion, "growx, growy, width max(40%, 40%)");
-        
+
         menuCargarMapa.addActionListener(this);
         btEjecutar.addActionListener(this);
         btSimular.addActionListener(this);
@@ -132,26 +138,47 @@ public class Principal implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       if (e.getSource() == menuCargarMapa) {
+        if (e.getSource() == menuCargarMapa) {
             mp = new Mapa();
             cargar_archivo();
             construir_mapa(mp.getMapa());
+            find_cur_pos(mp.getMapa());
         }
-       if (e.getSource() == btEjecutar) {
+        if (e.getSource() == btEjecutar) {
             construir_mapa(mp.getMapa());
             lbSolucion.setText("");
-            
+
             Instant inicio = Instant.now();
             if (AlgAmplitud.isSelected()) {
-               
+                solucion.clear();
+                BusquedaNoInformada_Amplitud bnia = new BusquedaNoInformada_Amplitud(mp.getMapa());
+                bnia.init();
+                solucion = bnia.getSolucion();
+                System.out.println(solucion.size());
             } else if (AlgCostoUniforme.isSelected()) {
-                
+                solucion.clear();
+                BusquedaNoInformada_CostoUniforme bnicu = new BusquedaNoInformada_CostoUniforme(mp.getMapa());
+                bnicu.init();
+                solucion = bnicu.getSolucion();
+                System.out.println(solucion.size());
             } else if (AlgProfundidadCicloNo.isSelected()) {
-                
+                solucion.clear();
+                BusquedaNoInformada_Profundidad bnip = new BusquedaNoInformada_Profundidad(mp.getMapa());
+                bnip.init();
+                solucion = bnip.getSolucion();
+                System.out.println(solucion.size());
             } else if (AlgAvara.isSelected()) {
-                
+                solucion.clear();
+                BusquedaInformada_Heuristica bih = new BusquedaInformada_Heuristica(mp.getMapa());
+                bih.init();
+                solucion = bih.getSolucion();
+                System.out.println(solucion.size());
             } else if (AlgA.isSelected()) {
-                
+                solucion.clear();
+                BusquedaInformada_AEstrella biae = new BusquedaInformada_AEstrella(mp.getMapa());
+                biae.init();
+                solucion = biae.getSolucion();
+                System.out.println(solucion.size());
             } else {
                 JOptionPane.showMessageDialog(null, "Seleccione algoritmo de búsqueda");
                 return;
@@ -166,10 +193,142 @@ public class Principal implements ActionListener {
                     + "</html>";
             System.out.println(Message);
             lbSolucion.setText(Message);
-            
+            mp.archivo_mapa(fichero);
+        }
+        if (e.getSource() == btSimular) {
+            construir_mapa(mp.getMapa());
+            simular();
         }
     }
-    
+
+    public void simular() {
+
+        final int delay = 300;
+        //mostrar_arbol();
+        new Timer(delay, new ActionListener() {
+            //Point posicion = agente.getPosicion();
+            final Iterator<String> camino = solucion.iterator();
+            String s;
+            Icon icon = null;
+            int posf = init_pos_x;
+            int posc = init_pos_y;
+            Point p = new Point(posc, posf);
+
+            public void actionPerformed(ActionEvent e) {
+                if (camino.hasNext()) {
+                    JLabel lblposicion = Labels.get(p);
+                    lblposicion.setIcon(icon);
+                    lblposicion.setBackground(Color.GREEN);
+                    s = camino.next();
+                    //System.out.println(s);
+                    if (s.equals("up")) {
+
+                        posf--;
+                        p.setLocation(posc, posf);
+                    } else if (s.equals("down")) {
+
+                        posf++;
+                        p.setLocation(posc, posf);
+                    } else if (s.equals("rigth")) { //Corregir right
+
+                        posc++;
+                        p.setLocation(posc, posf);
+                    } else if (s.equals("left")) {
+
+                        posc--;
+                        p.setLocation(posc, posf);
+                    }
+
+                    //lblposicion.setText(p.getCosto() + ":" + p.getHeuristica());
+                    JLabel PosicionNueva = Labels.get(p);
+                    icon = PosicionNueva.getIcon();
+
+                    PosicionNueva.setIcon(MARIO_IMG);
+                } else {
+                    ((Timer) e.getSource()).stop();
+                }
+            }
+        }).start();
+
+        /*
+        int[][] maux = new int[10][10];
+        int[][] mx = mp.getMapa();
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                maux[i][j] = mx[i][j];
+            }
+        }
+
+        int posf = init_pos_x;
+        int posc = init_pos_y;
+
+        int delay = 300;
+        
+        for (int i = 0; i < solucion.size(); i++) {
+            String mov = solucion.get(i);
+            System.out.println(mov);
+            if (mov.equals("up")) {
+
+                maux[posf - 1][posc] = 2;
+                if (mp.getPos(posf, posc) == 2) {
+
+                    maux[posf][posc] = 0;
+
+                } else {
+
+                    maux[posf][posc] = mp.getPos(posf, posc);
+
+                }
+                posf--;
+            } else if (mov.equals("down")) {
+                maux[posf + 1][posc] = 2;
+                if (mp.getPos(posf, posc) == 2) {
+                    maux[posf][posc] = 0;
+                } else {
+                    maux[posf][posc] = mp.getPos(posf, posc);
+                }
+                posf++;
+            } else if (mov.equals("rigth")) { //Corregir right
+                maux[posf][posc + 1] = 2;
+                if (mp.getPos(posf, posc) == 2) {
+                    maux[posf][posc] = 0;
+                } else {
+                    maux[posf][posc] = mp.getPos(posf, posc);
+                }
+                posc++;
+            } else if (mov.equals("left")) {
+                maux[posf][posc - 1] = 2;
+                if (mp.getPos(posf, posc) == 2) {
+                    maux[posf][posc] = 0;
+                } else {
+                    maux[posf][posc] = mp.getPos(posf, posc);
+                }
+                posc--;
+            }
+
+            construir_mapa(maux);
+            
+        
+        }
+
+        System.out.println("Fin simulacion");
+         */
+    }
+
+    void find_cur_pos(int maze[][]) {
+        for (int i = 0; i < maze.length; i++) {
+            for (int j = 0; j < maze[0].length; j++) {
+                if (maze[i][j] == 2) {
+                    init_pos_x = i;
+                    init_pos_y = j;
+                    return;
+                }
+
+            }
+
+        }
+    }
+
     public void cargar_archivo() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -189,17 +348,17 @@ public class Principal implements ActionListener {
         selectorArchivos.setAcceptAllFileFilterUsed(false);
         int seleccion = selectorArchivos.showOpenDialog(null);
         if (seleccion == JFileChooser.APPROVE_OPTION) {
-            File fichero = selectorArchivos.getSelectedFile();
+            fichero = selectorArchivos.getSelectedFile();
             mp.archivo_mapa(fichero);
         }
     }
-    
+
     public void construir_mapa(int[][] mapa) {
         pMapa.removeAll();
         pMapa.updateUI();
         pMapa.setLayout(new GridLayout(mapa.length, mapa[0].length));
         JLabel lb;
-        //-Labels = new HashMap<>();
+        Labels = new HashMap<>();
         for (int i = 0; i < mapa.length; i++) {//y
             for (int j = 0; j < mapa[0].length; j++) {//x
                 lb = new JLabel();
@@ -212,17 +371,17 @@ public class Principal implements ActionListener {
                         break;
                     case Mapa.INICIO:
                         lb.setIcon(MARIO_IMG);
-                        //-Agente = new Point(j, i);
+                        Agente = new Point(j, i);
                         break;
                     case Mapa.FLOR:
                         lb.setIcon(FLOR_IMG);
                         break;
                     case Mapa.TORTUGA:
-                        //-Meta = new Point(j, i);
+
                         lb.setIcon(TORTUGA_IMG);
                         break;
                     case Mapa.PRINCESA:
-                        //-Meta = new Point(j, i);
+                        Meta = new Point(j, i);
                         lb.setIcon(PRINCESA_IMG);
                         break;
                 }
@@ -230,7 +389,7 @@ public class Principal implements ActionListener {
                 lb.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 lb.setHorizontalAlignment(JLabel.CENTER);
                 lb.setMaximumSize(d);
-                //-Labels.put(new Point(j, i), lb);
+                Labels.put(new Point(j, i), lb);
                 pMapa.add(lb);
             }
         }

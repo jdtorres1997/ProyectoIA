@@ -28,9 +28,16 @@ public class Mapa implements Cloneable {
     public static final int COSTO_NORMAL = 1;
     public static final int COSTO_ENEMIGO = 7;
 
-    private int[][] mapa;
+    private static int[][] mapa;
 
     public Mapa() {
+    }
+    
+    public void setPos(int x, int y, int val){
+        mapa[x][y] = val;
+    }
+    public int getPos(int x, int y){
+        return mapa[x][y];
     }
 
     public void archivo_mapa(File f) {
