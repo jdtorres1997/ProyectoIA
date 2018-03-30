@@ -138,7 +138,7 @@ public class Principal implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        int nodosE = 0, profundidad = 0;
+        
         if (e.getSource() == menuCargarMapa) {
             mp = new Mapa();
             cargar_archivo();
@@ -148,7 +148,7 @@ public class Principal implements ActionListener {
         if (e.getSource() == btEjecutar) {
             construir_mapa(mp.getMapa());
             lbSolucion.setText("");
-
+            int nodosE = 0, profundidad = 0;
             Instant inicio = Instant.now();
             if (AlgAmplitud.isSelected()) {
                 solucion.clear();
@@ -157,7 +157,7 @@ public class Principal implements ActionListener {
                 solucion = bnia.getSolucion();
                 nodosE = bnia.getNodosE();
                 profundidad = bnia.getProfundidad();
-                System.out.println(solucion.size());
+                System.out.println(bnia.getNodosE());
             } else if (AlgCostoUniforme.isSelected()) {
                 solucion.clear();
                 BusquedaNoInformada_CostoUniforme bnicu = new BusquedaNoInformada_CostoUniforme(mp.getMapa());

@@ -20,12 +20,14 @@ public class BusquedaNoInformada_Amplitud {
     static int maze[][];
     static private ArrayList<String> solucion;
 
-    private static int nodosE = 0;
-    private static int profundidad = 0;
+    private static int nodosE;
+    private static int profundidad;
 
     BusquedaNoInformada_Amplitud(int[][] mapa) {
         maze = mapa;
         solucion = new ArrayList<>();
+        nodosE = 0;
+        profundidad = 0;
     }
 
     void find_cur_pos(int maze[][]) {
