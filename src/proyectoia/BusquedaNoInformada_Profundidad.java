@@ -18,6 +18,8 @@ public class BusquedaNoInformada_Profundidad {
     int target_pos_y;
     int init_pos_x;
     int init_pos_y;
+    private static int nodosE = 0;
+    private static int profundidad = 0;
     static int maze[][];
     static private ArrayList<String> solucion;
 
@@ -94,6 +96,7 @@ public class BusquedaNoInformada_Profundidad {
         for (int i = (temp.size() - 1); i >= 0; i--) {
             solucion.add(temp.get(i));
         }
+
         System.out.print(route);
 
     }
@@ -102,6 +105,13 @@ public class BusquedaNoInformada_Profundidad {
         return solucion;
     }
 
+    public int getProfundidad() {
+        return profundidad;
+    }
+
+    public int getNodosE(){
+        return nodosE;
+    }
     /**
      * @param args the command line arguments
      */
@@ -130,6 +140,7 @@ public class BusquedaNoInformada_Profundidad {
             if (hojas.get(0).getCur_pos_x() == aux.target_pos_x && hojas.get(0).getCur_pos_y() == aux.target_pos_y) {
                 flag = false;
                 arbol.add(hojas.get(0));
+                nodosE++;
             }
             if (flag) {
                 String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
@@ -167,6 +178,7 @@ public class BusquedaNoInformada_Profundidad {
                 }
 
                 arbol.add(hojas.get(0));
+                nodosE++;
                 hojas.remove(0);
                 auxiliar.addAll(hojas);
                 hojas.clear();

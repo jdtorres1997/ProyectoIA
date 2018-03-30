@@ -22,6 +22,9 @@ public class BusquedaInformada_Heuristica {
     static int maze[][];
     static private ArrayList<String> solucion;
 
+    private static int nodosE = 0;
+    private static int profundidad = 0;
+    
     BusquedaInformada_Heuristica(int[][] mapa) {
         maze = mapa;
         solucion = new ArrayList<>();
@@ -101,6 +104,13 @@ public class BusquedaInformada_Heuristica {
     ArrayList<String> getSolucion() {
         return solucion;
     }
+    public int getProfundidad() {
+        return profundidad;
+    }
+
+    public int getNodosE(){
+        return nodosE;
+    }
 
     int manhatan_Distance(int pos_x, int pos_y) {
         int respuesta = 0;
@@ -162,6 +172,7 @@ public class BusquedaInformada_Heuristica {
             if (hojas.get(0).getCur_pos_x() == aux.target_pos_x && hojas.get(0).getCur_pos_y() == aux.target_pos_y) {
                 flag = false;
                 arbol.add(hojas.get(0));
+                nodosE++;
             }
             if (flag) {
                 String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
@@ -203,6 +214,7 @@ public class BusquedaInformada_Heuristica {
                 }
 
                 arbol.add(hojas.get(0));
+                nodosE++;
                 hojas.remove(0);
                 for (int i = 0; i < hijos.size(); i++) {
                     hojas = aux.organizar(hojas, hijos.get(i), 0, hojas.size());

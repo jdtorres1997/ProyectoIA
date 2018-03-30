@@ -78,7 +78,7 @@ public class Principal implements ActionListener {
 
         menuAlgoritmo = new JMenu("Algoritmos");
         menuBar.add(menuAlgoritmo);
-        menuInformada = new JMenuItem("Busqueda Informada");
+        menuInformada = new JMenuItem("Busqueda no Informada");
         menuInformada.setEnabled(false);
         menuAlgoritmo.add(menuInformada);
         group = new ButtonGroup();
@@ -92,7 +92,7 @@ public class Principal implements ActionListener {
         group.add(AlgProfundidadCicloNo);
         menuAlgoritmo.add(AlgProfundidadCicloNo);
         menuAlgoritmo.addSeparator();
-        menuNoInformada = new JMenuItem("Busqueda No Informada");
+        menuNoInformada = new JMenuItem("Busqueda Informada");
         menuNoInformada.setEnabled(false);
         menuAlgoritmo.add(menuNoInformada);
         AlgAvara = new JRadioButtonMenuItem("Avara");
@@ -138,6 +138,7 @@ public class Principal implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        int nodosE = 0, profundidad = 0;
         if (e.getSource() == menuCargarMapa) {
             mp = new Mapa();
             cargar_archivo();
@@ -154,30 +155,40 @@ public class Principal implements ActionListener {
                 BusquedaNoInformada_Amplitud bnia = new BusquedaNoInformada_Amplitud(mp.getMapa());
                 bnia.init();
                 solucion = bnia.getSolucion();
+                nodosE = bnia.getNodosE();
+                profundidad = bnia.getProfundidad();
                 System.out.println(solucion.size());
             } else if (AlgCostoUniforme.isSelected()) {
                 solucion.clear();
                 BusquedaNoInformada_CostoUniforme bnicu = new BusquedaNoInformada_CostoUniforme(mp.getMapa());
                 bnicu.init();
                 solucion = bnicu.getSolucion();
+                nodosE = bnicu.getNodosE();
+                profundidad = bnicu.getProfundidad();
                 System.out.println(solucion.size());
             } else if (AlgProfundidadCicloNo.isSelected()) {
                 solucion.clear();
                 BusquedaNoInformada_Profundidad bnip = new BusquedaNoInformada_Profundidad(mp.getMapa());
                 bnip.init();
                 solucion = bnip.getSolucion();
+                nodosE = bnip.getNodosE();
+                profundidad = bnip.getProfundidad();
                 System.out.println(solucion.size());
             } else if (AlgAvara.isSelected()) {
                 solucion.clear();
                 BusquedaInformada_Heuristica bih = new BusquedaInformada_Heuristica(mp.getMapa());
                 bih.init();
                 solucion = bih.getSolucion();
+                nodosE = bih.getNodosE();
+                profundidad = bih.getProfundidad();
                 System.out.println(solucion.size());
             } else if (AlgA.isSelected()) {
                 solucion.clear();
                 BusquedaInformada_AEstrella biae = new BusquedaInformada_AEstrella(mp.getMapa());
                 biae.init();
                 solucion = biae.getSolucion();
+                nodosE = biae.getNodosE();
+                profundidad = biae.getProfundidad();
                 System.out.println(solucion.size());
             } else {
                 JOptionPane.showMessageDialog(null, "Seleccione algoritmo de búsqueda");
@@ -186,9 +197,10 @@ public class Principal implements ActionListener {
             Instant fin = Instant.now();
             Message = "<html><span style='font-size:1.2em' >Tiempo de cómputo : </span>"
                     + Duration.between(inicio, fin).toMillis() + " Milisegundos <br>"
-                    + "<span style='font-size:1.2em' >Costo : </span> "
-                    //Añadir costo
-                    + "<br>"
+                    + "<span style='font-size:1.2em' >Profundidad del arbol : </span> "
+                    + profundidad + "<br>"
+                    + "<span style='font-size:1.2em' >Nodos expandidos : </span>"
+                    + nodosE + "<br>"
                     //añadir nodos expandidos y profundidad arbol
                     + "</html>";
             System.out.println(Message);

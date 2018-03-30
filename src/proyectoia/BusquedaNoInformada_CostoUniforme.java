@@ -20,6 +20,8 @@ public class BusquedaNoInformada_CostoUniforme {
     int target_pos_y;
     int init_pos_x;
     int init_pos_y;
+    static int nodosE = 0;
+    static int profundidad = 0;
     static int maze[][];
     static private ArrayList<String> solucion;
 
@@ -99,9 +101,17 @@ public class BusquedaNoInformada_CostoUniforme {
         System.out.print(route);
 
     }
-    
+
     ArrayList<String> getSolucion() {
         return solucion;
+    }
+
+    public int getProfundidad() {
+        return profundidad;
+    }
+
+    public int getNodosE() {
+        return nodosE;
     }
 
     int manhatan_Distance(int pos_x, int pos_y) {
@@ -180,6 +190,7 @@ public class BusquedaNoInformada_CostoUniforme {
             if (hojas.get(0).getCur_pos_x() == aux.target_pos_x && hojas.get(0).getCur_pos_y() == aux.target_pos_y) {
                 flag = false;
                 arbol.add(hojas.get(0));
+                nodosE++;
 
             }
             if (flag) {
@@ -234,6 +245,7 @@ public class BusquedaNoInformada_CostoUniforme {
                 }
 
                 arbol.add(hojas.get(0));
+                nodosE++;
                 hojas.remove(0);
                 for (int i = 0; i < hijos.size(); i++) {
                     hojas = aux.organizar(hojas, hijos.get(i), 0, hojas.size());

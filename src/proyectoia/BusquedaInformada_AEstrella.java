@@ -22,6 +22,9 @@ public class BusquedaInformada_AEstrella {
     static int maze[][];
     static private ArrayList<String> solucion;
 
+    private static int nodosE = 0;
+    private static int profundidad = 0;
+    
     BusquedaInformada_AEstrella(int[][] mapa) {
         maze = mapa;
         solucion = new ArrayList<>();
@@ -102,6 +105,13 @@ public class BusquedaInformada_AEstrella {
     ArrayList<String> getSolucion() {
         return solucion;
     }
+    public int getProfundidad() {
+        return profundidad;
+    }
+
+    public int getNodosE(){
+        return nodosE;
+    }
 
     int manhatan_Distance(int pos_x, int pos_y) {
         int respuesta = 0;
@@ -179,6 +189,7 @@ public class BusquedaInformada_AEstrella {
             if (hojas.get(0).getCur_pos_x() == aux.target_pos_x && hojas.get(0).getCur_pos_y() == aux.target_pos_y) {
                 flag = false;
                 arbol.add(hojas.get(0));
+                nodosE++;
                 
             }
             if (flag) {
@@ -233,6 +244,7 @@ public class BusquedaInformada_AEstrella {
                 }
 
                 arbol.add(hojas.get(0));
+                nodosE++;
                 hojas.remove(0);
                 for (int i = 0; i < hijos.size(); i++) {
                     hojas = aux.organizar(hojas, hijos.get(i), 0, hojas.size());

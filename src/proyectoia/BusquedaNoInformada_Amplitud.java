@@ -21,6 +21,9 @@ public class BusquedaNoInformada_Amplitud {
     static int maze[][];
     static private ArrayList<String> solucion;
     
+    private static int nodosE = 0;
+    private static int profundidad = 0;
+    
     BusquedaNoInformada_Amplitud(int[][] mapa) {
         maze = mapa;
         solucion = new ArrayList<>();
@@ -101,6 +104,14 @@ public class BusquedaNoInformada_Amplitud {
     ArrayList<String> getSolucion() {
         return solucion;
     }
+    
+    public int getProfundidad() {
+        return profundidad;
+    }
+
+    public int getNodosE(){
+        return nodosE;
+    }
 
     /**
      * @param args the command line arguments
@@ -126,6 +137,7 @@ public class BusquedaNoInformada_Amplitud {
             if (hojas.get(0).getCur_pos_x() == aux.target_pos_x && hojas.get(0).getCur_pos_y() == aux.target_pos_y) {
                 flag = false;
                 arbol.add(hojas.get(0));
+                nodosE++;
             }
             if (flag) {
                 String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
@@ -164,6 +176,7 @@ public class BusquedaNoInformada_Amplitud {
                 }
 
                 arbol.add(hojas.get(0));
+                nodosE++;
                 hojas.remove(0);
             }
         } while (flag);
