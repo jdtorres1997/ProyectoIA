@@ -102,6 +102,7 @@ public class BusquedaInformada_AEstrella {
 
     }
     
+    
     ArrayList<String> getSolucion() {
         return solucion;
     }
@@ -215,7 +216,7 @@ public class BusquedaInformada_AEstrella {
                     if(new_son.getProfundidad() > aux.getProfundidad()){
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hojas.add(new_son);
+                    hijos.add(new_son);
                 }
                 if (moves.contains("6") && (hojas.get(0).getMov() != "left" || matica)) {
                     id++;
@@ -230,7 +231,7 @@ public class BusquedaInformada_AEstrella {
                     if(new_son.getProfundidad() > aux.getProfundidad()){
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hojas.add(new_son);
+                    hijos.add(new_son);
                 }
                 if (moves.contains("2") && (hojas.get(0).getMov() != "up" || matica)) {
                     id++;
@@ -245,7 +246,7 @@ public class BusquedaInformada_AEstrella {
                     if(new_son.getProfundidad() > aux.getProfundidad()){
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hojas.add(new_son);
+                    hijos.add(new_son);
                 }
                 if (moves.contains("4") && (hojas.get(0).getMov() != "rigth" || matica)) {
                     id++;
@@ -260,7 +261,7 @@ public class BusquedaInformada_AEstrella {
                     if(new_son.getProfundidad() > aux.getProfundidad()){
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hojas.add(new_son);
+                    hijos.add(new_son);
                 }
 
                 arbol.add(hojas.get(0));

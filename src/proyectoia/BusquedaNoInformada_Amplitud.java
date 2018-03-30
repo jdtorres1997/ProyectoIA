@@ -135,16 +135,21 @@ public class BusquedaNoInformada_Amplitud {
         System.out.println("Initial posicion: (" + aux.init_pos_x + "," + aux.init_pos_y + ")");
         System.out.println("Target posicion: (" + aux.target_pos_x + "," + aux.target_pos_y + ")");
         Boolean flag = true;
-
+        boolean matica = false;
         do {
+            matica = false;
             if (hojas.get(0).getCur_pos_x() == aux.target_pos_x && hojas.get(0).getCur_pos_y() == aux.target_pos_y) {
                 flag = false;
                 arbol.add(hojas.get(0));
                 nodosE++;
             }
             if (flag) {
+                if (maze[hojas.get(0).getCur_pos_x()][hojas.get(0).getCur_pos_y()] == 3) {
+                    hojas.get(0).setEstado(1);
+                    matica = true;
+                }
                 String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
-                if (moves.contains("8") && hojas.get(0).getMov() != "down") {
+                if (moves.contains("8") && (hojas.get(0).getMov() != "down" || matica)) {
                     id++;
                     Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
@@ -156,7 +161,7 @@ public class BusquedaNoInformada_Amplitud {
                     }
                     hojas.add(new_son);
                 }
-                if (moves.contains("6") && hojas.get(0).getMov() != "left") {
+                if (moves.contains("6") && (hojas.get(0).getMov() != "left" || matica)) {
                     id++;
                     Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
@@ -168,7 +173,7 @@ public class BusquedaNoInformada_Amplitud {
                     }
                     hojas.add(new_son);
                 }
-                if (moves.contains("2") && hojas.get(0).getMov() != "up") {
+                if (moves.contains("2") && (hojas.get(0).getMov() != "up" || matica)) {
                     id++;
                     Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
@@ -179,9 +184,8 @@ public class BusquedaNoInformada_Amplitud {
                         aux.setProfundidad(new_son.getProfundidad());
                     }
                     hojas.add(new_son);
-                    hojas.add(new_son);
                 }
-                if (moves.contains("4") && hojas.get(0).getMov() != "rigth") {
+                if (moves.contains("4") && (hojas.get(0).getMov() != "rigth" || matica)) {
                     id++;
                     Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());

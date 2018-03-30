@@ -101,6 +101,20 @@ public class BusquedaNoInformada_Profundidad {
 
     }
 
+    boolean wasHere(Vector<Nodo> arbol, Nodo new_nodo) {
+        boolean respuesta = false;
+        int parentid = new_nodo.getParent_id();
+        for (int i = arbol.size() - 1; i >= 0; i--) {
+            if (arbol.get(i).getId() == parentid) {
+                parentid = arbol.get(i).getParent_id();
+                if (arbol.get(i).getCur_pos_x() == new_nodo.getCur_pos_x() && arbol.get(i).getCur_pos_y() == new_nodo.getCur_pos_y()) {
+                    return true;
+                }
+            }
+        }
+        return respuesta;
+    }
+
     ArrayList<String> getSolucion() {
         return solucion;
     }
@@ -112,11 +126,11 @@ public class BusquedaNoInformada_Profundidad {
     public static void setProfundidad(int profundidad) {
         BusquedaNoInformada_Profundidad.profundidad = profundidad;
     }
-    
 
-    public int getNodosE(){
+    public int getNodosE() {
         return nodosE;
     }
+
     /**
      * @param args the command line arguments
      */
@@ -139,63 +153,75 @@ public class BusquedaNoInformada_Profundidad {
         System.out.println("Initial posicion: (" + aux.init_pos_x + "," + aux.init_pos_y + ")");
         System.out.println("Target posicion: (" + aux.target_pos_x + "," + aux.target_pos_y + ")");
         Boolean flag = true;
-
+        boolean matica = false;
         do {
-
+            matica = false;
             if (hojas.get(0).getCur_pos_x() == aux.target_pos_x && hojas.get(0).getCur_pos_y() == aux.target_pos_y) {
                 flag = false;
                 arbol.add(hojas.get(0));
                 nodosE++;
             }
             if (flag) {
+                if (maze[hojas.get(0).getCur_pos_x()][hojas.get(0).getCur_pos_y()] == 3) {
+                    hojas.get(0).setEstado(1);
+                    matica = true;
+                }
                 String moves = aux.find_move(maze, hojas.get(0).getCur_pos_x(), hojas.get(0).getCur_pos_y());
-                if (moves.contains("8") && hojas.get(0).getMov() != "down") {
+                if (moves.contains("8") && (hojas.get(0).getMov() != "down" || matica)) {
                     id++;
                     Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() - 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("up");
-                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
-                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                    new_son.setProfundidad(hojas.get(0).getProfundidad() + 1);
+                    if (new_son.getProfundidad() > aux.getProfundidad()) {
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hojas.add(new_son);
+                    if (!aux.wasHere(arbol, new_son)) {
+                        hijos.add(new_son);
+                    }
                 }
-                if (moves.contains("6") && hojas.get(0).getMov() != "left") {
+                if (moves.contains("6") && (hojas.get(0).getMov() != "left" || matica)) {
                     id++;
                     Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() + 1);
                     new_son.setMov("rigth");
-                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
-                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                    new_son.setProfundidad(hojas.get(0).getProfundidad() + 1);
+                    if (new_son.getProfundidad() > aux.getProfundidad()) {
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hojas.add(new_son);
+                    if (!aux.wasHere(arbol, new_son)) {
+                        hijos.add(new_son);
+                    }
                 }
-                if (moves.contains("2") && hojas.get(0).getMov() != "up") {
+                if (moves.contains("2") && (hojas.get(0).getMov() != "up" || matica)) {
                     id++;
                     Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x() + 1);
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y());
                     new_son.setMov("down");
-                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
-                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                    new_son.setProfundidad(hojas.get(0).getProfundidad() + 1);
+                    if (new_son.getProfundidad() > aux.getProfundidad()) {
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hojas.add(new_son);
+                    if (!aux.wasHere(arbol, new_son)) {
+                        hijos.add(new_son);
+                    }
                 }
-                if (moves.contains("4") && hojas.get(0).getMov() != "rigth") {
+                if (moves.contains("4") && (hojas.get(0).getMov() != "rigth" || matica)) {
                     id++;
                     Nodo new_son = new Nodo(id, hojas.get(0).getId());
                     new_son.setCur_pos_x(hojas.get(0).getCur_pos_x());
                     new_son.setCur_pos_y(hojas.get(0).getCur_pos_y() - 1);
                     new_son.setMov("left");
-                    new_son.setProfundidad(hojas.get(0).getProfundidad()+1);
-                    if(new_son.getProfundidad() > aux.getProfundidad()){
+                    new_son.setProfundidad(hojas.get(0).getProfundidad() + 1);
+                    if (new_son.getProfundidad() > aux.getProfundidad()) {
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hojas.add(new_son);
+                    if (!aux.wasHere(arbol, new_son)) {
+                        hijos.add(new_son);
+                    }
                 }
 
                 arbol.add(hojas.get(0));
