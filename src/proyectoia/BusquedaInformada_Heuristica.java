@@ -28,6 +28,8 @@ public class BusquedaInformada_Heuristica {
     BusquedaInformada_Heuristica(int[][] mapa) {
         maze = mapa;
         solucion = new ArrayList<>();
+        nodosE = 0;
+        profundidad = 0;
     }
 
     void find_cur_pos(int maze[][]) {
@@ -152,6 +154,20 @@ public class BusquedaInformada_Heuristica {
         return arreglo;
     }
 
+    boolean wasHere(Vector<Nodo> arbol, Nodo new_nodo) {
+        boolean respuesta = false;
+        int parentid = new_nodo.getParent_id();
+        for (int i = arbol.size() - 1; i >= 0; i--) {
+            if (arbol.get(i).getId() == parentid) {
+                parentid = arbol.get(i).getParent_id();
+                if (arbol.get(i).getCur_pos_x() == new_nodo.getCur_pos_x() && arbol.get(i).getCur_pos_y() == new_nodo.getCur_pos_y()) {
+                    return true;
+                }
+            }
+        }
+        return respuesta;
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -199,7 +215,9 @@ public class BusquedaInformada_Heuristica {
                     if (new_son.getProfundidad() > aux.getProfundidad()) {
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hijos.add(new_son);
+                    if (!aux.wasHere(arbol, new_son)) {
+                        hijos.add(new_son);
+                    }
                 }
                 if (moves.contains("6") && (hojas.get(0).getMov() != "left" || matica)) {
                     id++;
@@ -212,7 +230,9 @@ public class BusquedaInformada_Heuristica {
                     if (new_son.getProfundidad() > aux.getProfundidad()) {
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hijos.add(new_son);
+                    if (!aux.wasHere(arbol, new_son)) {
+                        hijos.add(new_son);
+                    }
                 }
                 if (moves.contains("2") && (hojas.get(0).getMov() != "up" || matica)) {
                     id++;
@@ -225,7 +245,9 @@ public class BusquedaInformada_Heuristica {
                     if (new_son.getProfundidad() > aux.getProfundidad()) {
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hijos.add(new_son);
+                    if (!aux.wasHere(arbol, new_son)) {
+                        hijos.add(new_son);
+                    }
                 }
                 if (moves.contains("4") && (hojas.get(0).getMov() != "rigth" || matica)) {
                     id++;
@@ -238,7 +260,9 @@ public class BusquedaInformada_Heuristica {
                     if (new_son.getProfundidad() > aux.getProfundidad()) {
                         aux.setProfundidad(new_son.getProfundidad());
                     }
-                    hijos.add(new_son);
+                    if (!aux.wasHere(arbol, new_son)) {
+                        hijos.add(new_son);
+                    }
                 }
 
                 arbol.add(hojas.get(0));

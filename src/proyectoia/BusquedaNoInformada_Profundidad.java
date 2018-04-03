@@ -26,6 +26,8 @@ public class BusquedaNoInformada_Profundidad {
     BusquedaNoInformada_Profundidad(int[][] mapa) {
         maze = mapa;
         solucion = new ArrayList<>();
+        nodosE = 0;
+        profundidad = 0;
     }
 
     void find_cur_pos(int maze[][]) {
